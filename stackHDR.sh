@@ -9,6 +9,12 @@ KEEP_FILES=false
 
 while getopts ':d:f:aekr' flag; do
     case "${flag}" in
+    	d)
+	    DIR="$OPTARG"
+	    ;;
+	f)
+	    FILES+=("$OPTARG")
+	    ;;
 	a)
 	    ALIGN=true
 	    ;;
@@ -21,38 +27,42 @@ while getopts ':d:f:aekr' flag; do
 	r)
 	    REMOVE_RAW=true
 	    ;;
-	d)
-	    DIR="$OPTARG"
-	    ;;
-	f)
-	    FILES+=("$OPTARG")
-	    ;;
 	h)
 	    echo "Syntax:"
-	    echo "\$ `basename $0` [-a -e -k -r] [-f] <one-filename> [-d] <directory-name>"
+	    echo "\$ `basename $0` [-d] <directory-name> [-f] <one-filename> [-a -e -k -r]"
+	    echo "	-d: The directory containing your files (will stack all RAW files therein)."
+	    echo "	-f: File to add to stack, repeat as needed. Files should be in the same directory."
 	    echo "	-a: Align images."
 	    echo "	-e: Use enfuse to fuse the images together."
 	    echo "	-k: Keep intermediately created files."
 	    echo "	-r: Remove original RAW files. DO NOT USE unless your files are backed up."
-	    echo "	-d: The directory containing your files (will stack all RAW files therein)."
-	    echo "	-f: File to add to stack, repeat as needed. Files should be in the same directory."
 	    echo "	-h: Show this message."
+	    exit 1
 	    ;;
 	\?)
 	    echo "Invalid option: -$OPTARG" >&2
 	    echo "Syntax:"
 	    echo "\$ `basename $0` [-a -e -k -r] [-f] <one-filename> [-d] <directory-name>"
+	    echo "	-d: The directory containing your files (will stack all RAW files therein)."
+	    echo "	-f: File to add to stack, repeat as needed. Files should be in the same directory."
 	    echo "	-a: Align images."
 	    echo "	-e: Use enfuse to fuse the images together."
 	    echo "	-k: Keep intermediately created files."
 	    echo "	-r: Remove original RAW files. DO NOT USE unless your files are backed up."
-	    echo "	-d: The directory containing your files (will stack all RAW files therein)."
-	    echo "	-f: File to add to stack, repeat as needed. Files should be in the same directory."
 	    echo "	-h: Show this message."
 	    exit 1
 	    ;;
 	:)
 	    echo "Option -$OPTARG requires an argument." >&2
+	    echo "Syntax:"
+	    echo "\$ `basename $0` [-a -e -k -r] [-f] <one-filename> [-d] <directory-name>"
+	    echo "	-d: The directory containing your files (will stack all RAW files therein)."
+	    echo "	-f: File to add to stack, repeat as needed. Files should be in the same directory."
+	    echo "	-a: Align images."
+	    echo "	-e: Use enfuse to fuse the images together."
+	    echo "	-k: Keep intermediately created files."
+	    echo "	-r: Remove original RAW files. DO NOT USE unless your files are backed up."
+	    echo "	-h: Show this message."
 	    exit 1
 	    ;;
     esac
