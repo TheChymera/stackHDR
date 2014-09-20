@@ -7,7 +7,7 @@ This script is based on the earlier (and as of 2012, unmaintained) [`hdr.sh` scr
 
 ####On [Gentoo Linux](http://en.wikipedia.org/wiki/Gentoo_linux) and [Derivatives](http://en.wikipedia.org/wiki/Category:Gentoo_Linux_derivatives):
 
-StackHDR is available in the [Portage](http://en.wikipedia.org/wiki/Portage_(software)) *[chymerc overlay](https://github.com/TheChymera/chymeric)* as **[media-gfx/stackHDR](https://github.com/TheChymera/chymeric/tree/master/media-gfx/stackHDR)**.
+StackHDR is available in the [Portage](http://en.wikipedia.org/wiki/Portage_(software)) *[chymeric overlay](https://github.com/TheChymera/chymeric)* as **[media-gfx/stackHDR](https://github.com/TheChymera/chymeric/tree/master/media-gfx/stackHDR)**.
 Just run the following command:
 
 ```
