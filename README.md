@@ -21,8 +21,8 @@ emerge media-gfx/stackHDR
 For all other Linux distributions or operating systems, the script can also be run directly from its containing directory (and thus, needs only be downloaded from here):
 
 ```
-git clone https://github.com/TheChymera/stackHDR.git /your/mkstage4/directory
-cd /your/mkstage4/directory
+git clone https://github.com/TheChymera/stackHDR.git /your/stackHDR/directory
+cd /your/stackHDR/directory
 chmod +x mkstage4.sh
 ```
 
