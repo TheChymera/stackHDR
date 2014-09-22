@@ -69,9 +69,11 @@ shift $(($OPTIND - 1))
 FILES=($@)
 
 #Check if either $FILES or $DIR is specified and assign the other variable accordingly
-if [ -z "$FILES" ]; then
-    if $DIR; then
-	FILES=("$DIR"/*.NEF)
+if [ -z $FILES ]; then
+    if [ -n $DIR ]; then
+	echo "lala"
+	FILES=("$DIR"/*.{NEF,nef,NRW,nrw,CR2,cr2,PEF,pef,PTX,ptx,PXN,pxn,SR2,sr2,SRF,srf,SRW,srw})
+	FILES=(${FILES[@]//*\**/})
     else
 	echo "No files selected! You need to specify either a -d option or a list of files."
     fi
