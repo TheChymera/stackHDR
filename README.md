@@ -36,7 +36,7 @@ chmod +x mkstage4.sh
 ##Usage
 Run the script either as `stackHDR` (if installed globally), or as `./stackHDR.sh` from the containing folder:
 ```
-stackHDR [-d] <directory-name> [-f] <one-filename> [-a -e -k -r]
+stackHDR [-a -e -k -r] -d <directory-name> || <file-names>
 ```
 
 Example:
@@ -48,8 +48,9 @@ stackHDR -f ~/path/to/your/pics/folder/DSC_1337.NEF -f ~/path/to/your/pics/folde
 
 ```
 required:
-	-d: The directory containing your files (will stack all RAW files therein).
-	-f: File to add to stack, repeat as needed. Files should be in the same directory.
+	-d <directory-name>: The directory containing your files (will stack all RAW files therein).
+	OR
+	<file-names>: Specify your files directly. Files should be in the same directory.
     
 optional:
 	-a: Align images.

@@ -1,19 +1,18 @@
 #! /bin/bash
 #Authors: Edu Perez, Horea Christian
 
+#Set base variables
 SELF=`basename $0`
 REMOVE_RAW=false
 ENFUSE=false
 ALIGN=false
 KEEP_FILES=false
 
-while getopts ':d:f:aekr' flag; do
+#Assign variable values based on user input
+while getopts ':d:aekr' flag; do
     case "${flag}" in
     	d)
 	    DIR="$OPTARG"
-	    ;;
-	f)
-	    FILES+=("$OPTARG")
 	    ;;
 	a)
 	    ALIGN=true
@@ -29,9 +28,8 @@ while getopts ':d:f:aekr' flag; do
 	    ;;
 	h)
 	    echo "Syntax:"
-	    echo "\$ `basename $0` [-d] <directory-name> [-f] <one-filename> [-a -e -k -r]"
+	    echo "\$ `basename $0` [-a -e -k -r] -d <directory-name> || <file-names>"
 	    echo "	-d: The directory containing your files (will stack all RAW files therein)."
-	    echo "	-f: File to add to stack, repeat as needed. Files should be in the same directory."
 	    echo "	-a: Align images."
 	    echo "	-e: Use enfuse to fuse the images together."
 	    echo "	-k: Keep intermediately created files."
@@ -42,9 +40,8 @@ while getopts ':d:f:aekr' flag; do
 	\?)
 	    echo "Invalid option: -$OPTARG" >&2
 	    echo "Syntax:"
-	    echo "\$ `basename $0` [-a -e -k -r] [-f] <one-filename> [-d] <directory-name>"
+	    echo "\$ `basename $0` [-a -e -k -r] -d <directory-name> || <file-names>"
 	    echo "	-d: The directory containing your files (will stack all RAW files therein)."
-	    echo "	-f: File to add to stack, repeat as needed. Files should be in the same directory."
 	    echo "	-a: Align images."
 	    echo "	-e: Use enfuse to fuse the images together."
 	    echo "	-k: Keep intermediately created files."
@@ -55,9 +52,8 @@ while getopts ':d:f:aekr' flag; do
 	:)
 	    echo "Option -$OPTARG requires an argument." >&2
 	    echo "Syntax:"
-	    echo "\$ `basename $0` [-a -e -k -r] [-f] <one-filename> [-d] <directory-name>"
+	    echo "\$ `basename $0` [-a -e -k -r] -d <directory-name> || <file-names>"
 	    echo "	-d: The directory containing your files (will stack all RAW files therein)."
-	    echo "	-f: File to add to stack, repeat as needed. Files should be in the same directory."
 	    echo "	-a: Align images."
 	    echo "	-e: Use enfuse to fuse the images together."
 	    echo "	-k: Keep intermediately created files."
@@ -68,23 +64,40 @@ while getopts ':d:f:aekr' flag; do
     esac
 done
 
+#Shifts pointer to read mandatory output file specification
+shift $(($OPTIND - 1))
+FILES=($@)
+
+#Check if either $FILES or $DIR is specified and assign the other variable accordingly
 if [ -z "$FILES" ]; then
     if $DIR; then
 	FILES=("$DIR"/*.NEF)
     else
-	echo "No files selected! You need to specify either a -d or an -f option."
+	echo "No files selected! You need to specify either a -d option or a list of files."
     fi
 else
-    DIR=${FILES[0]%/*}
+    if [[ ${FILES[0]} == */* ]]; then
+	DIR=${FILES[0]%/*}
+    else
+	DIR="."
+    fi
 fi
 
-COUNT=${#FILES[@]}
+#Check whether the option flags are grabbed by $FILES  
+if [[ ${FILES[@]} == *[[:space:]]-* ]]; then
+    echo "WARNING: Your file list seems to contain an option flag."
+    echo "	 If the script fails, please make sure you have"
+    echo "	 specified the flags before the files list."
+fi
 
+#Check if any files match the criteria specified by the user
+COUNT=${#FILES[@]}
 if [ $COUNT -eq 0 ]; then
     echo "$SELF: No files found!!!"
     exit 1
 fi
 
+#Summary of input
 echo "$SELF Options:"
 echo "	Align      = ${ALIGN}"
 echo "	Enfuse     = ${ENFUSE}"
@@ -122,4 +135,10 @@ if [ "$ENFUSE" = true ]; then
 	echo "$SELF: Cleanning aligned TIFF files:"
 	rm -f ${TIFF_FILES[*]}
     fi
+fi
+
+#Remove original RAW input if thus specified by the user
+if $REMOVE_RAW; then
+    echo "$SELF: Removing original RAW files:"
+    rm -f ${FILES[*]}
 fi
