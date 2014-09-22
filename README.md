@@ -36,7 +36,7 @@ chmod +x mkstage4.sh
 ##Usage
 Run the script either as `stackHDR` (if installed globally), or as `./stackHDR.sh` from the containing folder:
 ```
-stackHDR [-a -e -k -r] -d <directory-name> || <file-names>
+stackHDR [-a -e -k -r -c -h] -d <directory-name> || <file-names>
 ```
 
 Example:
@@ -57,6 +57,7 @@ optional:
 	-e: Use enfuse to fuse the images together.
 	-k: Keep intermediately created files.
 	-r: Remove original RAW files. DO NOT USE unless your files are backed up.
+	-c: Clean all log files. Enabling this means you will be unable to debug.
 	-h: Show this message.
 ```
 

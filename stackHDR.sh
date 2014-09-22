@@ -7,9 +7,10 @@ REMOVE_RAW=false
 ENFUSE=false
 ALIGN=false
 KEEP_FILES=false
+CLEAN_LOGS=false
 
 #Assign variable values based on user input
-while getopts ':d:aekr' flag; do
+while getopts ':d:aekrch' flag; do
     case "${flag}" in
     	d)
 	    DIR="$OPTARG"
@@ -26,38 +27,44 @@ while getopts ':d:aekr' flag; do
 	r)
 	    REMOVE_RAW=true
 	    ;;
+	c)
+	    CLEAN_LOGS=true
+	    ;;
 	h)
 	    echo "Syntax:"
-	    echo "\$ `basename $0` [-a -e -k -r] -d <directory-name> || <file-names>"
+	    echo "\$ `basename $0` [-a -e -k -r -c -h] -d <directory-name> || <file-names>"
 	    echo "	-d: The directory containing your files (will stack all RAW files therein)."
 	    echo "	-a: Align images."
 	    echo "	-e: Use enfuse to fuse the images together."
 	    echo "	-k: Keep intermediately created files."
 	    echo "	-r: Remove original RAW files. DO NOT USE unless your files are backed up."
+	    echo "	-c: Clean all log files. Enabling this means you will be unable to debug."
 	    echo "	-h: Show this message."
 	    exit 1
 	    ;;
 	\?)
 	    echo "Invalid option: -$OPTARG" >&2
 	    echo "Syntax:"
-	    echo "\$ `basename $0` [-a -e -k -r] -d <directory-name> || <file-names>"
+	    echo "\$ `basename $0` [-a -e -k -r -c -h] -d <directory-name> || <file-names>"
 	    echo "	-d: The directory containing your files (will stack all RAW files therein)."
 	    echo "	-a: Align images."
 	    echo "	-e: Use enfuse to fuse the images together."
 	    echo "	-k: Keep intermediately created files."
 	    echo "	-r: Remove original RAW files. DO NOT USE unless your files are backed up."
+	    echo "	-c: Clean all log files. Enabling this means you will be unable to debug."
 	    echo "	-h: Show this message."
 	    exit 1
 	    ;;
 	:)
 	    echo "Option -$OPTARG requires an argument." >&2
 	    echo "Syntax:"
-	    echo "\$ `basename $0` [-a -e -k -r] -d <directory-name> || <file-names>"
+	    echo "\$ `basename $0` [-a -e -k -r -c -h] -d <directory-name> || <file-names>"
 	    echo "	-d: The directory containing your files (will stack all RAW files therein)."
 	    echo "	-a: Align images."
 	    echo "	-e: Use enfuse to fuse the images together."
 	    echo "	-k: Keep intermediately created files."
 	    echo "	-r: Remove original RAW files. DO NOT USE unless your files are backed up."
+	    echo "	-c: Clean all log files. Enabling this means you will be unable to debug."
 	    echo "	-h: Show this message."
 	    exit 1
 	    ;;
@@ -143,4 +150,10 @@ fi
 if $REMOVE_RAW; then
     echo "$SELF: Removing original RAW files:"
     rm -f ${FILES[*]}
+fi
+
+#Remove all logs
+if $CLEAN_LOGS; then
+    echo "$SELF: Removing all log files:"
+    rm -f "$DIR"/enfuse.log "$DIR"/align_image_stack.log
 fi
